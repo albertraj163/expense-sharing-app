@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Balances — Expense Sharing{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Balance Summary</h1>
+        <p class="subtitle">Who owes whom based on all recorded expenses</p>
+    </div>
+</div>
+
+{% if balances %}
+<div class="balance-grid">
+    {% for person, balance in balances|dictsort %}
+    <div class="balance-card {% if balance > 0 %}positive{% elif balance < 0 %}negative{% else %}neutral{% endif %}">
+        <h3>{{ person }}</h3>
+        {% if balance > 0 %}
+            <p class="balance-amount">+${{ "%.2f"|format(balance) }}</p>
+            <p class="balance-label">should receive</p>
+        {% elif balance < 0 %}
+            <p class="balance-amount">-${{ "%.2f"|format(balance|abs) }}</p>
+            <p class="balance-label">owes the group</p>
+        {% else %}
+            <p class="balance-amount">$0.00</p>
+            <p class="balance-label">all settled up</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<div class="settlement-card">
+    <h2>Suggested Settlements</h2>
+    {% if settlements %}
+    <ul class="settlement-list">
+        {% for s in settlements %}
+        <li><strong>{{ s.from_person }}</strong> pays <strong>{{ s.to_person }}</strong> <span class="amount">${{ "%.2f"|format(s.amount) }}</span></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="subtitle">Everyone is settled up — no payments needed!</p>
+    {% endif %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">📊</div>
+    <h2>No balances to show</h2>
+    <p>Add some expenses first to see who owes what.</p>
+    <a href="{{ url_for('add_expense') }}" class="btn btn-primary">Add Expense</a>
+</div>
+{% endif %}
+{% endblock %}
