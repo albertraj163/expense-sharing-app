@@ -2,7 +2,9 @@
 
 A full-stack Flask app to track shared expenses and calculate who owes whom.
 
-**Live demo:** Deploy via [Render](https://render.com) (free tier) — see [Deploy](#deploy-for-free) below.
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/albertraj163/expense-sharing-app)
+
+**Repository:** https://github.com/albertraj163/expense-sharing-app
 
 ## Features
 
