@@ -1,10 +1,11 @@
 import os
+import socket
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///database.db')
+app.config['SECRET_KEY'] = 'local-dev-key'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -64,6 +65,16 @@ def compute_settlements(balances):
     return settlements
 
 
+def find_free_port(start=5000):
+    port = start
+    while port < start + 100:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            if s.connect_ex(('127.0.0.1', port)) != 0:
+                return port
+        port += 1
+    return start
+
+
 with app.app_context():
     db.create_all()
 
@@ -103,7 +114,7 @@ def add_expense():
         )
         db.session.add(expense)
         db.session.commit()
-        flash('Expense added successfully!', 'success')
+        flash('Expense added successfully.', 'success')
         return redirect(url_for('index'))
 
     return render_template('add_expense.html')
@@ -127,5 +138,6 @@ def summary():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=os.environ.get('FLASK_DEBUG', '0') == '1')
+    port = int(os.environ.get('PORT', find_free_port()))
+    print(f'\n  ExpenseSplit running at http://localhost:{port}\n')
+    app.run(host='127.0.0.1', port=port, debug=True)

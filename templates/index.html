@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Expenses — Expense Sharing{% endblock %}
+{% block title %}Expenses — ExpenseSplit{% endblock %}
 
 {% block content %}
 <div class="page-header">
     <div>
-        <h1>Shared Expenses</h1>
-        <p class="subtitle">All expenses recorded by your group</p>
+        <h1>Expenses</h1>
+        <p class="subtitle">All shared expenses for your group</p>
     </div>
-    <a href="{{ url_for('add_expense') }}" class="btn btn-primary">+ Add Expense</a>
+    <a href="{{ url_for('add_expense') }}" class="btn btn-primary">Add Expense</a>
 </div>
 
 {% if expenses %}
@@ -16,15 +16,15 @@
     <div class="expense-card">
         <div class="expense-card-header">
             <h3>{{ expense.title }}</h3>
-            <span class="amount">${{ "%.2f"|format(expense.amount) }}</span>
+            <span class="amount">₹{{ "%.2f"|format(expense.amount) }}</span>
         </div>
         <div class="expense-meta">
             <span class="badge badge-paid">Paid by {{ expense.paid_by }}</span>
-            <span class="badge badge-split">Split: {{ expense.participants }}</span>
+            <span class="badge">{{ expense.participants }}</span>
         </div>
         {% set people = expense.participants.split(',') %}
         {% set share = expense.amount / (people|length if people else 1) %}
-        <p class="share-info">${{ "%.2f"|format(share) }} per person</p>
+        <p class="share-info">₹{{ "%.2f"|format(share) }} per person</p>
         <form action="{{ url_for('delete_expense', expense_id=expense.id) }}" method="POST" class="delete-form"
               onsubmit="return confirm('Delete this expense?');">
             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -34,15 +34,14 @@
 </div>
 
 <div class="summary-bar">
-    <span>Total: <strong>${{ "%.2f"|format(expenses|sum(attribute='amount')) }}</strong></span>
-    <a href="{{ url_for('summary') }}" class="btn btn-secondary">View Balances →</a>
+    <span>Total: <strong>₹{{ "%.2f"|format(expenses|sum(attribute='amount')) }}</strong></span>
+    <a href="{{ url_for('summary') }}" class="btn btn-secondary">View Balances</a>
 </div>
 {% else %}
 <div class="empty-state">
-    <div class="empty-icon">💸</div>
-    <h2>No expenses yet</h2>
-    <p>Add your first shared expense to start tracking who owes what.</p>
-    <a href="{{ url_for('add_expense') }}" class="btn btn-primary">Add First Expense</a>
+    <h2>No expenses recorded</h2>
+    <p>Add an expense to start tracking shared costs.</p>
+    <a href="{{ url_for('add_expense') }}" class="btn btn-primary">Add Expense</a>
 </div>
 {% endif %}
 {% endblock %}

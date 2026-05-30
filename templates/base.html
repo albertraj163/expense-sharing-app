@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Expense Sharing{% endblock %}</title>
+    <title>{% block title %}ExpenseSplit{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <nav class="navbar">
-        <a href="{{ url_for('index') }}" class="logo">SplitWise Lite</a>
+        <a href="{{ url_for('index') }}" class="logo">Expense<span>Split</span></a>
         <div class="nav-links">
             <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Expenses</a>
             <a href="{{ url_for('add_expense') }}" class="{% if request.endpoint == 'add_expense' %}active{% endif %}">Add Expense</a>
@@ -32,7 +32,7 @@
     </main>
 
     <footer class="footer">
-        <p>Expense Sharing App &mdash; track and split shared costs</p>
+        <p>ExpenseSplit — local expense tracker</p>
     </footer>
 </body>
 </html>

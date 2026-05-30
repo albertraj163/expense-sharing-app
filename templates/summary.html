@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Balances — Expense Sharing{% endblock %}
+{% block title %}Balances — ExpenseSplit{% endblock %}
 
 {% block content %}
 <div class="page-header">
     <div>
         <h1>Balance Summary</h1>
-        <p class="subtitle">Who owes whom based on all recorded expenses</p>
+        <p class="subtitle">Net balances based on all recorded expenses</p>
     </div>
 </div>
 
@@ -15,14 +15,14 @@
     <div class="balance-card {% if balance > 0 %}positive{% elif balance < 0 %}negative{% else %}neutral{% endif %}">
         <h3>{{ person }}</h3>
         {% if balance > 0 %}
-            <p class="balance-amount">+${{ "%.2f"|format(balance) }}</p>
-            <p class="balance-label">should receive</p>
+            <p class="balance-amount">+₹{{ "%.2f"|format(balance) }}</p>
+            <p class="balance-label">To receive</p>
         {% elif balance < 0 %}
-            <p class="balance-amount">-${{ "%.2f"|format(balance|abs) }}</p>
-            <p class="balance-label">owes the group</p>
+            <p class="balance-amount">-₹{{ "%.2f"|format(balance|abs) }}</p>
+            <p class="balance-label">To pay</p>
         {% else %}
-            <p class="balance-amount">$0.00</p>
-            <p class="balance-label">all settled up</p>
+            <p class="balance-amount">₹0.00</p>
+            <p class="balance-label">Settled</p>
         {% endif %}
     </div>
     {% endfor %}
@@ -33,18 +33,20 @@
     {% if settlements %}
     <ul class="settlement-list">
         {% for s in settlements %}
-        <li><strong>{{ s.from_person }}</strong> pays <strong>{{ s.to_person }}</strong> <span class="amount">${{ "%.2f"|format(s.amount) }}</span></li>
+        <li>
+            <span><strong>{{ s.from_person }}</strong> pays <strong>{{ s.to_person }}</strong></span>
+            <span class="amount">₹{{ "%.2f"|format(s.amount) }}</span>
+        </li>
         {% endfor %}
     </ul>
     {% else %}
-    <p class="subtitle">Everyone is settled up — no payments needed!</p>
+    <p class="subtitle">All balances are settled. No payments required.</p>
     {% endif %}
 </div>
 {% else %}
 <div class="empty-state">
-    <div class="empty-icon">📊</div>
-    <h2>No balances to show</h2>
-    <p>Add some expenses first to see who owes what.</p>
+    <h2>No balance data</h2>
+    <p>Add expenses to calculate balances.</p>
     <a href="{{ url_for('add_expense') }}" class="btn btn-primary">Add Expense</a>
 </div>
 {% endif %}
