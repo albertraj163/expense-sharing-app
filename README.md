@@ -4,6 +4,12 @@ A local app to track shared expenses and split bills with your group.
 
 Runs **only on your computer** — no internet or hosting needed.
 
+## Local URL
+
+After starting the app, open:
+
+**http://localhost:5001**
+
 ## Quick Start
 
 ```bash
@@ -16,8 +22,6 @@ Or simply:
 ```bash
 ./run.sh
 ```
-
-Then open the URL shown in the terminal (usually http://localhost:5000).
 
 ## Features
 

@@ -138,6 +138,6 @@ def summary():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', find_free_port()))
+    port = int(os.environ.get('PORT', find_free_port(5001)))
     print(f'\n  ExpenseSplit running at http://localhost:{port}\n')
     app.run(host='127.0.0.1', port=port, debug=True)
