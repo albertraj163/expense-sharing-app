@@ -1,7 +1,9 @@
 import os
-import socket
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+
+LOCAL_HOST = '127.0.0.1'
+LOCAL_PORT = 5001
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'local-dev-key'
@@ -63,16 +65,6 @@ def compute_settlements(balances):
         if creditors[j][1] < 0.01:
             j += 1
     return settlements
-
-
-def find_free_port(start=5000):
-    port = start
-    while port < start + 100:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            if s.connect_ex(('127.0.0.1', port)) != 0:
-                return port
-        port += 1
-    return start
 
 
 with app.app_context():
@@ -138,6 +130,8 @@ def summary():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', find_free_port(5001)))
-    print(f'\n  ExpenseSplit running at http://localhost:{port}\n')
-    app.run(host='127.0.0.1', port=port, debug=True)
+    port = int(os.environ.get('PORT', LOCAL_PORT))
+    url = f'http://localhost:{port}'
+    print(f'\n  ExpenseSplit — local only')
+    print(f'  Open: {url}\n')
+    app.run(host=LOCAL_HOST, port=port, debug=True)
