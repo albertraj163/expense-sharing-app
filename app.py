@@ -1,9 +1,16 @@
 import os
+import socket
+import sys
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 LOCAL_HOST = '127.0.0.1'
 LOCAL_PORT = 5001
+
+
+def port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        return sock.connect_ex((LOCAL_HOST, port)) == 0
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'local-dev-key'
@@ -132,6 +139,13 @@ def summary():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', LOCAL_PORT))
     url = f'http://localhost:{port}'
+
+    if port_in_use(port):
+        print(f'\n  ExpenseSplit is already running at {url}')
+        print('  Open that link in your browser.\n')
+        sys.exit(0)
+
     print(f'\n  ExpenseSplit — local only')
-    print(f'  Open: {url}\n')
-    app.run(host=LOCAL_HOST, port=port, debug=True)
+    print(f'  Open: {url}')
+    print('  Press Ctrl+C to stop\n')
+    app.run(host=LOCAL_HOST, port=port, debug=True, use_reloader=False)

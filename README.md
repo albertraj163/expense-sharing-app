@@ -14,20 +14,28 @@ Runs **only on localhost** — no internet or external hosting.
 
 > Port: **5001** · Host: **127.0.0.1** (localhost only)
 
-## Run
+## Run (important — do this first)
+
+Open a terminal in this folder, then run:
+
+```bash
+./run.sh
+```
+
+Keep that terminal open. Then open in your browser:
+
+**http://localhost:5001**
+
+Or manually:
 
 ```bash
 pip3 install -r requirements.txt
 python3 app.py
 ```
 
-Or:
+### "Connection refused" error?
 
-```bash
-./run.sh
-```
-
-Then open **http://localhost:5001** in your browser.
+The app is not running. Run `./run.sh` first, wait for `Running on http://127.0.0.1:5001`, then refresh the browser.
 
 ## Features
 
